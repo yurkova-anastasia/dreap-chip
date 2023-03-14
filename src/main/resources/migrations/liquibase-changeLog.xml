@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+  <changeSet id="1" author="nastya">
+    <comment>create table "accounts"</comment>
+    <createTable tableName="accounts">
+      <column name="id" type="int4" autoIncrement="true">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="first_name" type="varchar(256)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_name" type="varchar(256)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="email" type="varchar(256)">
+        <constraints nullable="false" unique="true"/>
+      </column>
+      <column name="password" type="varchar(256)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="2" author="nastya">
+    <comment>create table "animal_types"</comment>
+    <createTable tableName="animal_types">
+      <column name="id" type="bigserial" autoIncrement="true">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="type" type="varchar(256)">
+        <constraints nullable="false" unique="true"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="3" author="nastya">
+    <comment>create table "location_points"</comment>
+    <createTable tableName="location_points">
+      <column name="id" type="bigserial" autoIncrement="true">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="date_time_of_visit_location_point" type="timestamp">
+        <constraints nullable="false"/>
+      </column>
+      <column name="location_point_id" type="bigint">
+        <constraints nullable="false"/>
+      </column>
+      <column name="animal_id" type="bigint">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="4" author="nastya">
+    <comment>create table "locations"</comment>
+    <createTable tableName="locations">
+      <column name="id" type="bigserial" autoIncrement="true">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="latitude" type="double">
+        <constraints nullable="false"/>
+      </column>
+      <column name="longitude" type="double">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="5" author="nastya">
+    <comment>create table "animals"</comment>
+    <createTable tableName="animals">
+      <column name="id" type="bigserial" autoIncrement="true">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="weight" type="double">
+        <constraints nullable="false"/>
+      </column>
+      <column name="length" type="double">
+        <constraints nullable="false"/>
+      </column>
+      <column name="height" type="double">
+        <constraints nullable="false"/>
+      </column>
+      <column name="gender" type="varchar(8)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="life_status" type="varchar(8)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="chipping_date_time" type="timestamp">
+        <constraints nullable="false"/>
+      </column>
+      <column name="chipper_id" type="int4">
+        <constraints nullable="false"/>
+      </column>
+      <column name="chipping_location_id" type="int4">
+        <constraints nullable="false"/>
+      </column>
+      <column name="death_date_time" type="timestamp">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="6" author="nastya">
+    <comment>add foreign key to "location_point_id" column</comment>
+    <sql>
+      ALTER TABLE location_points
+        ADD CONSTRAINT fk_location_points_locations FOREIGN KEY (location_point_id) REFERENCES locations (id)
+    </sql>
+  </changeSet>
+
+  <changeSet id="7" author="nastya">
+    <comment>add foreign key to "animal_id" column</comment>
+    <sql>
+      ALTER TABLE location_points
+        ADD CONSTRAINT fk_location_points_animals FOREIGN KEY (animal_id) REFERENCES animals (id)
+    </sql>
+  </changeSet>
+
+  <changeSet id="8" author="nastya">
+    <comment>add foreign key to "chipper_id" column</comment>
+    <sql>
+      ALTER TABLE animals
+        ADD CONSTRAINT fk_animals_accounts FOREIGN KEY (chipper_id) REFERENCES accounts (id)
+    </sql>
+  </changeSet>
+</databaseChangeLog>
